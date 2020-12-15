@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+
+<channel>
+<title>Daniel's Blog</title>
+<link>https://blog.danieliu.xyz</link>
+<description>random stuff that daniel wants to post</description>
+
+    <!-- BLOG START -->
+<!-- ID:Suckless START -->
+<item>
+<title>Suckless</title>
+<link></link>
+<description><\description>
+<\item>
+<!-- ID:Suckless END -->
+    <!-- BLOG END -->
+
+</channel>
+
+</rss>

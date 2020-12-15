@@ -1,0 +1,115 @@
+
+html {
+    --bg-very-light: #3c4143;
+    --bg-light: #181a1b;
+    --bg-dark: #0d1214;
+    --text-light: white;
+    --text-dark: #aec2d3;
+
+    font-family: arial, helvetica, sans-serif;
+}
+body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    
+    background-color: var(--bg-dark);
+}
+
+code {
+    color: var(--text-light);
+    background-color: var(--bg-light);
+    border: 1px solid #999;
+    display: block;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+
+h1 {
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+h2 {
+    color: var(--text-light);
+}
+
+h3 {
+    color: var(--text-light);
+}
+
+p {
+    color: var(--text-dark);
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-light); 
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+li::marker {
+    color: var(--text-light);
+}
+
+.header_banner {
+    background-color: var(--bg-light);
+
+    padding: 0.5rem; 
+    display: flex; 
+    flex-direction: row; 
+    justify-content: flex-end;
+}
+
+.logo {
+    margin-right: auto;
+}
+
+.navcontainer {
+    margin-right: 0.5rem;
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+}
+
+.rolling-container {
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.rolling-entry {
+
+}
+
+.rolling-date {
+    margin: 0;
+}
+
+.navitem {
+    color: var(--text-dark);
+    transition: all 0.3s;
+}
+.navitem:hover {
+    color: var(--text-light);
+    text-decoration: none;
+}
+
+.entry {
+    margin: 2rem;
+    width: 75%;
+}
+
+.entry h2 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.publish {
+    color: var(--text-dark);
+}
