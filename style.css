@@ -84,11 +84,16 @@ li::marker {
 }
 
 .rolling-entry {
-
+    margin-bottom: 3rem;
 }
 
 .rolling-date {
     margin: 0;
+}
+
+.article-container {
+    margin-left: 15%;
+    margin-right: 15%;
 }
 
 .navitem {

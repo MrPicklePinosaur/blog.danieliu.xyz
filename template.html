@@ -1,14 +1,30 @@
 <!DOCTYPE html>
 <html>
     <head>
+
         <meta charset="utf-8">
-        <title></title>
+        <link rel="stylesheet" href="../../style.css"> 
+        <title>{{TITLE}} - PinoLog</title>
+
     </head>
 
     <body>
         
+        <!-- redundant code, also use absolute paths -->
+        <div class="header_banner">
+            <a class="logo" href="../../rolling.html"><img src="../../static/pinolog_banner.png"/></a>
+            <div class="navcontainer">
+                <a class="navitem" href="../../rss.xml">rss</a>
+            </div>
+            <div class="navcontainer">
+                <a class="navitem" href="../../blogindex.html">index</a>
+            </div>
+        </div> 
+        
+        <div class="article-container">
         <h1>{{TITLE}}</h1>
         {{BODY}}
+        </div>
 
     </body>
 </html>
