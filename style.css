@@ -15,6 +15,16 @@ body {
     
     background-color: var(--bg-dark);
 }
+body::-webkit-scrollbar {
+    width: 0.25rem;
+}
+body::-webkit-scrollbar-track {
+    display: none;
+}
+body::-webkit-scrollbar-thumb {
+    background: var(--text-dark);
+    border-radius: 1rem;
+}
 
 code {
     color: var(--text-light);
@@ -58,7 +68,8 @@ li::marker {
     color: var(--text-light);
 }
 
-.header_banner {
+
+#header-banner {
     background-color: var(--bg-light);
 
     padding: 0.5rem; 
@@ -92,6 +103,11 @@ li::marker {
 }
 
 .article-container {
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.index-container {
     margin-left: 15%;
     margin-right: 15%;
 }

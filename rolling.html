@@ -5,19 +5,13 @@
         <meta charset="utf-8">
         <title>PinoLog</title>
         <link rel="stylesheet" href="style.css"> 
+        <link rel="shortcut icon" href="static/pinolog_fav.png">
 
     </head>
     
     <body>
         
-        <div class="header_banner">
-            <a class="logo" href="rolling.html"><img src="static/pinolog_banner.png"/></a>
-            <div class="navcontainer">
-                <a class="navitem" href="rss.xml">rss</a>
-            </div>
-            <div class="navcontainer">
-                <a class="navitem" href="blogindex.html">index</a>
-            </div>
+        <div id="header-banner">
         </div> 
 
         <div class="rolling-container">
@@ -25,7 +19,7 @@
 <!-- ID:animelon START -->
 <div class="rolling-entry">
 <h1><a href="file:///home/pinosaur/Repos/blog.danieliu.xyz/blog/html/animelon.html">animelon</a></h1>
-<p class="rolling-date">Fri, Dec 18 14:31</p>
+<p class="rolling-date">Fri, Dec 18 16:29</p>
 <hr>
 <p>
 Great site anime site for learning japanese called <a href="https://animelon.com/">animelon</a> that provides english subtitles as well as japanese (with options for romaji and hiragana). You can also hover over subtitles to get definitions, and jump between dialogue lines. Anyways, it has some decently high quality stuff so it can used as a normal anime site. Only downside is that it doesn't have the newer stuff, since they need to get the subs and translate them.
@@ -35,45 +29,117 @@ Great site anime site for learning japanese called <a href="https://animelon.com
 <!-- ID:Suckless START -->
 <div class="rolling-entry">
 <h1><a href="file:///home/pinosaur/Repos/blog.danieliu.xyz/blog/html/Suckless.html">Suckless</a></h1>
-<p class="rolling-date">Fri, Dec 18 14:31</p>
+<p class="rolling-date">Fri, Dec 18 16:29</p>
 <hr>
 
+<h3>What the heck is Suckless even?</h3>
+
+<h3>Installing</h3>
 
 <p>
-If you are here, I will assume that you are already convinced on why 
-suckless software is awesome, and are just trying to find out how the
-heck you use it.
+This guide will focus specifically on dwm, as it is one of the more involved installs. The installation and patching process is the same for any other Suckless software though.
 </p>
 
-<h3>> Installing</h3>
-<p>
-Before you do any patching and the like, you need to actually install the 
-software.
-To do this, clone the repo from the <a href="https://suckless.org/">suckless site</a>
-For this example, I will be demonstrating how to install and patch dwm, the suckless
-window manager, but the same process applies for any other suckless software.
 
-Inside the directory, run 
+
+<p>
+Before you do any patching and the like, you need to actually install dwm.
+To do this, clone the repo from the <a href="https://suckless.org/">suckless site</a>.
+</p>
+
+<p>
+Inside the working directory, all we need to do is to tell the makefile to install the software for us, so run 
 <code>make &amp;&amp; sudo make clean install</code>
 
+notice that we didn't give sudo to make, it's better practice to not run commands as root unless you absolutely need to.
 </p>
 
+<p>
+If the make didn't succeed, chances are you are missing some headers. On my fresh install, I was missing the X11/Xft/Xft.h header and X11/extensions/Xinerama.h header, so you will need to install the libxft and libxinerama packages respectively (for arch at least).
+</p>
+
+<p>
+The second issue I had at first was that I didn't have any fonts installed, I got the adobe-source-code-pro-fonts package.
+</p>
+
+<p>
+... and that's it! The installation process is done, not so hard right?
+If you use X, simply add the line:
+<code>exec dwm</code>
+to the bottom of you .xinitrc file. Keep in mind that any lines after this will be <a href="https://wiki.archlinux.org/index.php/Xinit#xinitrc">ignored</a>. Now on your next X server start, you will be greeted with dwm, in all it's beautiful glory.
+</p>
+
+[Insert default install pic]
 
 
-<h3>> Patches</h3>
+<h3>Basics</h3>
+
+<p>
+As per traditional Suckless style, "source code is documentation". The <a href="https://dwm.suckless.org/tutorial/">suckless page</a> gives a pretty good overview of the default keybindings a features, but you should get used to reading the README (ofc), reading the man page (if there is one), and reading the config.def.h file (probably the most important). We will talk about configuration in a bit, but let's just open up the config.def.h file up real quick and take a look around.
+</p>
+
+Need to go through default keybindings 
+
+[TEMP] if you don't have a terminal installed yet, we can quit out of dwm and view in our tty
+
+
+[maybe include code snippet of Keys or screenshot]
+
+<p>
+Let's first look at the array called 'Keys'. Instead of constantly going to the Suckless page or searching up something like 'plz, how do i close window in dwm', all the keybindings and their functions are defined here, so feel free to consult this file as often as you need to.
+</p>
+
+Talk about dwm tags, different layouts, advantage over i3 and other managers than let you choose layout direction
+
+[TAGS]
+Basically like standard 'workspaces', but work a tiny bit different.
+Gotta admit, almost never needed to have multiple tags active.
+
+[BUILTIN MODES]
+tile
+monocle
+floating - for r/unixporn screenshots
+
+<h3></h3>
+
+Recommended options / config
+
+<h3>Patches</h3>
 <p>My personal suckless forks are available <a href="https://git.danieliu.xyz/">here</a></p>
 
-<h3>> Resources</h3>
-<p>Obviously I didn't know all this info, so here's some resources that I used</p>
+<p>I use</p>
+<ul>
+    <li><a href="https://dwm.suckless.org/patches/gaps/">gaps</a> - just for vanity</li>
+    <li><a href="https://dwm.suckless.org/patches/xresources/">xresources</a> - easier customizating and consitncy with the rest of your programs</li>
+    <li><a href="https://dwm.suckless.org/patches/pertag/">pertag</a> - makes layouts specific for tags</li>
+    <li><a href="https://dwm.suckless.org/patches/fakefullscreen/">fake full screen</a> - forces full screen to stay inside tile</li>
+    <li><a href="https://dwm.suckless.org/patches/swallow/">swallow</a> - here's an entire <a href="https://www.youtube.com/watch?v=92uo5OBOKfY">video</a> on why swallow is awesome</li>
+    <li><a href=""></a> - </li>
+</ul>
+
+<h3>Resources</h3>
+<p>Here's some additional resources</p>
 <ul>
     <li><a href="https://www.youtube.com/watch?v=UEmPboaTDpQ">patching guide by HexDSL</a><a></a></li><a>
     </a><li><a></a><a href="https://www.youtube.com/watch?v=fBrc_xgwQE8">patching guide by Brodie Robertson</a><a></a></li><a>
 </a></ul><a>
+
+<h1>サックレスは難しくないよ！</h1>
+
+<h3>「サックレス」って何？</h3>
+
+<h3>インストール</h3>
+
+<h3>初歩</h3>
+
+<h3>パッチ</h3>
+
 </div>
 <!-- ID:Suckless END -->
         <!-- BLOG END -->
         </div>
 
     </body>
+    <script src="include.js"></script>
 
 </html>

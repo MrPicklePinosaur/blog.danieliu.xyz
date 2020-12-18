@@ -5,26 +5,23 @@
         <meta charset="utf-8">
         <link rel="stylesheet" href="../../style.css"> 
         <title>{{TITLE}} - PinoLog</title>
+        <link rel="shortcut icon" href="../../static/pinolog_fav.png">
 
     </head>
 
     <body>
         
-        <!-- redundant code, also use absolute paths -->
-        <div class="header_banner">
-            <a class="logo" href="../../rolling.html"><img src="../../static/pinolog_banner.png"/></a>
-            <div class="navcontainer">
-                <a class="navitem" href="../../rss.xml">rss</a>
-            </div>
-            <div class="navcontainer">
-                <a class="navitem" href="../../blogindex.html">index</a>
-            </div>
+        <div id="header-banner">
         </div> 
         
         <div class="article-container">
         <h1>{{TITLE}}</h1>
+        <p class="rolling-date">{{DATE}}</p>
+        <hr>
         {{BODY}}
         </div>
 
     </body>
+    <script src="../../include.js"></script>
+    
 </html>
