@@ -7,20 +7,13 @@
 <description>random stuff that daniel wants to post</description>
 
     <!-- BLOG START -->
-<!-- ID:animelon START -->
+<!-- ID:Welcome To Blog START -->
 <item>
-<title>animelon</title>
+<title>Welcome To Blog</title>
 <link></link>
 <description></description>
 </item>
-<!-- ID:animelon END -->
-<!-- ID:Suckless START -->
-<item>
-<title>Suckless</title>
-<link></link>
-<description></description>
-</item>
-<!-- ID:Suckless END -->
+<!-- ID:Welcome To Blog END -->
     <!-- BLOG END -->
 
 </channel>
