@@ -16,6 +16,83 @@
 
         <div class="rolling-container">
         <!-- BLOG START -->
+<!-- ID:Vim users remap caps to escape rnrn START -->
+<div class="rolling-entry">
+<h1><a href="https://blog.danieliu.xyz/blog/html/Vim users remap caps to escape rnrn.html">Vim users remap caps to escape rnrn</a></h1>
+<p class="rolling-date">Fri, Jan 15 17:02</p>
+<hr>
+
+<p>
+Probably the worst nightmare of any vim user is accidentally hitting the caps key.
+</p>
+
+<p>
+Caps lock is useless, for the vast majority of time, you only need to capitalize just the first letter, so pressing caps + letter + caps is too many key presses! Simply releasing the shift key is much faster and feels much better. 
+</p>
+
+<p>
+However most importantly, it leaves such an ergonomic key open for... escape! One of the most commonly hit keys of vim users. Such an important key is so far from the home row, almost acting counterproductive to the speed boost vim gives you.
+</p>
+
+<h2>How to remap (Linux)</h2>
+<h3>Setxkbmap</h3>
+<p>
+On linux, if you happen to use X (which is most people), you can get away with using setxkbmap, simply include the following in your .xinitrc, or some alternative auto run script:
+<code>
+setxkbmap -option caps:escape
+</code>
+
+For the most part this will work well enough. Another option would be to make a custom key map with xmodmap, if one of these has any issues give the other a try.
+</p>
+
+<h3>Xmodmap</h3>
+<p>
+You can make a custom key map by running:
+<code>
+xmodmap -pke &gt; ~/.Xmodmap
+</code>
+and then simply add
+<code>
+xmodmap "$HOME/.Xmodmap"
+</code>
+to your .xinitrc or equivalent.
+</p>
+
+<p>
+As for the actual configuration, I added these lines to .Xmodmap:
+<pre><code>remove Lock = Caps_Lock
+keysym Caps_Lock = Escape
+add Lock = Caps_Lock
+</code></pre>
+</p>
+
+<p>
+Oh, and also, if you screw something up and want to reset your keyboard, you can use:
+<code>
+setxkbmap -layout us
+</code>
+or whatever your default keyboard layout was.
+</p>
+
+<h2>How to remap (Windows)</h2>
+<p>
+I'm not much of a windows user, but here's a nice article from the <a href="https://vim.fandom.com/wiki/Map_caps_lock_to_escape_in_Windows#AutoHotkey">vim website</a>. I specifically recommend using autohotkey, as it gives you much more fine control on the behavior (you can do things like make caps function as escape only when running vim).
+</p>
+
+<h2>Afterthought</h2>
+<p>
+An alternative may be actually mapping caps to control instead, arguable a much more used key than escape in vim and especially in gui programs. Instead, you can use ctrl+[ as <a href="https://vim.fandom.com/wiki/Avoid_the_escape_key">escape instead</a> in vim. I'm still currently using escape, but I'll probably try control sometime in the near future. Regardless, the point is, uninstall caps lock already!
+</p>
+
+<h2>Additional Reading</h2>
+<p>Here are some links you might want to check out:</p>
+<ul>
+    <li><p><a href="https://wiki.archlinux.org/index.php/xmodmap">Arch Wiki - xmodmap</p></a></li>
+    <li><p><a href="https://wiki.archlinux.org/index.php/Xorg/Keyboard_configuration">Arch Wiki - X keyboard config</p></a</li>
+    <li><p><a href="https://wiki.linuxquestions.org/wiki/Configuring_keyboards#The_Xmodmap.2FSetxkbmap_Method">LinuxQuestions - Configuring Keyboards</p></a></li>
+</ul>
+</div>
+<!-- ID:Vim users remap caps to escape rnrn END -->
 <!-- ID:Animelon for learning japanese START -->
 <div class="rolling-entry">
 <h1><a href="https://blog.danieliu.xyz/blog/html/Animelon for learning japanese.html">Animelon for learning japanese</a></h1>
