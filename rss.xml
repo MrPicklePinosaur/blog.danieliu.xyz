@@ -7,6 +7,34 @@
 <description>random stuff that daniel wants to post</description>
 
     <!-- BLOG START -->
+<!-- ID:ブログへようこそ START -->
+<item>
+<title>ブログへようこそ</title>
+<link>https://blog.danieliu.xyz/blog/html/ブログへようこそ.html</link>
+<description>
+<![CDATA[
+
+<p>
+僕はブログへようこそ！このサイトでいろいろソフトに関することを掲載します．
+フワイ，<a href="https://github.com/MrPicklePinosaur/pb">このシェルスクリプト</a>で作ります，ブログは．
+</p>
+
+<p>
+日本語初心者ですけど多分文法がちょっと変でしょう．
+ブログ書くのは日本語練習って思います．とにかく，頑張ってます．
+</p>
+
+<p>
+あーほら，ギフです．どう致しまして．
+</p>
+
+<img src="https://files.danieliu.xyz/blog/welcome-jp/bonk.gif" />
+
+</p>
+]]>
+</description>
+</item>
+<!-- ID:ブログへようこそ END -->
 <!-- ID:Vim users remap caps to escape rnrn START -->
 <item>
 <title>Vim users remap caps to escape rnrn</title>
