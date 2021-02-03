@@ -16,6 +16,94 @@
 
         <div class="rolling-container">
         <!-- BLOG START -->
+<!-- ID:Configure Zathura with Xresources START -->
+<div class="rolling-entry">
+<h1><a href="https://blog.danieliu.xyz/blog/html/Configure Zathura with Xresources.html">Configure Zathura with Xresources</a></h1>
+<p class="rolling-date">Wed, Feb 03 14:22</p>
+<hr>
+
+<p>
+The .Xresources file is great. It is a centralized place for you to define color themes and fonts among other things to be read by a variety of applications. This allows for a consistent theme, and less hassle when changing settings. Everyone knows that repetitive code is bad code.
+</p>
+
+<p>
+However, for whatever reason, zathura, my pdf viewer of choice, does not want to read from this file.
+The effect I wanted to achieve was to make zathura have the same background color as my terminal, like so:
+</p>
+
+<img src="https://files.danieliu.xyz/blog/xresource-zathura/zathura_xresource.png"/>
+
+<p>
+Obviously we aren't going to give up over such a small obstacle. 
+It's a slight hassle, but we could simply have a shell script read from Xresource and write into the zathura config file.
+The only downside is that the script needs to be run everytime you want to modify the config.
+</p>
+
+<p>
+First, locate your zathura config file. By default, it should be located at <code class="inline-code">$HOME/.config/zathura/zathurarc</code>. So this is the file we want to write our new config to.
+</p>
+
+<p>
+Now to read from Xresource, we could just use sed or grep and find the line we want and format it so we get the value. However, if you used macros, this might not play out too well. Thankfully, X gives us a handy command to query our Xresource settings, namely <code class="inline-code">xrdb -query</code>. The output of this command looks something like this:
+<pre><code>*.background:   #2E3440
+*.color0:       #3B4252
+*.color1:       #BF616A
+*.color10:      #A3BE8C
+*.color11:      #EBCB8B
+*.color12:      #81A1C1
+*.color13:      #B48EAD
+*.color14:      #8FBCBB
+*.color15:      #ECEFF4
+*.color2:       #A3BE8C
+*.color3:       #EBCB8B
+*.color4:       #81A1C1
+*.color5:       #B48EAD
+*.color6:       #88C0D0
+*.color7:       #E5E9F0
+*.color8:       #4C566A
+*.color9:       #BF616A
+</code></pre>
+</p>
+
+<p>
+So now all we need to do is grep for the option we want, and use awk to grab the second column.
+</p>
+
+<p>
+I made a function to query X like so:
+<pre><code>get_option() {
+    xrdb -query | grep $1 | awk '{print $2}'
+}
+</code></pre>
+</p>
+
+<p>
+And now we are ready to write to our config file. Since our config will most likely be multiline, we can use <a href="https://en.wikipedia.org/wiki/Here_document#Unix_shells">heredocs</a>:
+<pre><code>cat &gt; "$HOME/.config/zathura/zathurarc" &lt;&lt;- CONF
+    set recolor
+    set recolor-darkcolor "$(get_option foreground)"
+    set recolor-lightcolor "$(get_option *.color0:)"
+    set default-bg "$(get_option *.color0:)"
+    map i recolor
+CONF
+</code></pre>
+</p>
+
+<p>
+Note that using <code class="inline-code">&lt;&lt;-</code> ignores leading tabs while <code class="inline-code">&lt;&lt;</code> does not, just for aesthetic. Notice how we used command substitution to call the function we wrote earlier.
+</p>
+
+<p>
+Finally, chmod your shell script and run it every time you want to make a change to your config. Since we are overwriting the zathura config, you want to define your options inside the body of the heredoc instead. 
+The example config I gave provides the background color behavior I described earlier. Specifically, we actually redefine the colors zathura's 'invert color' mode uses. This way, we can toggle between the original pdf color and our colors with the 'i' key.
+</p>
+
+<p>
+And that's it! We are done, shell script to the rescue.
+</p>
+
+</div>
+<!-- ID:Configure Zathura with Xresources END -->
 <!-- ID:ブログへようこそ START -->
 <div class="rolling-entry">
 <h1><a href="https://blog.danieliu.xyz/blog/html/ブログへようこそ.html">ブログへようこそ</a></h1>
