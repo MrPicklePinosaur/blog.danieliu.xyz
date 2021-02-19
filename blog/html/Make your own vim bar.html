@@ -1,0 +1,195 @@
+<!-- ID:Make your own vim bar START -->
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="../../style.css"> 
+        <title>Make your own vim bar - PinoLog</title>
+        <link rel="shortcut icon" href="../../static/pinolog_fav.png">
+
+    </head>
+
+    <body>
+        
+        <div id="header-banner">
+        </div> 
+        
+        <div class="article-container">
+        <h1>Make your own vim bar</h1>
+        <p class="rolling-date">Fri, Feb 19 15:39</p>
+        <hr>
+
+<p>
+The vim bar that I have been using up until now was <a href="https://github.com/vim-airline/vim-airline">vim airline</a>.
+Don't get me wrong, it's a great bar that looks awesome, but I wanted a bar that used my terminal colors, for more consistent theming.
+I was also sorta in the mood for cutting down the number of plugins I was using, since chances are, vim already has that feature builtin.
+Finally, vim airline had a lot of information I didn't need or care about. I'm aware that it's very configurable, but it's better to 
+start from less and add in features than start from bloat and cut down.
+</p>
+
+<p>
+Anyways, I really only looked for a couple things in my bar:
+</p>
+<ul>
+    <li><p>Display what mode I'm in (and a bar that changes color to reflect that)</p></li>
+    <li><p>Indicate if the buffer is modified</p></li>
+    <li><p>Display currently opened buffers</p></li>
+</ul>
+
+<p>
+The first thing we need to do is actually enable the vim bar. You can do so by adding this line to your <code class="inline-code">.vimrc</code>:
+</p>
+<pre><code>set laststatus=2
+set statusline=
+</code></pre>
+<p>
+You can alternatively use a value of 1, which only displays the status line if there are more than 2 windows. With this option,
+the bar acts more like a window separator.
+What we really want is a statusbar, so it should be on at all times (hence the 2 option).
+The second line clears whatever was in your statusline before, this isn't too required.
+</p>
+
+<h2>Basic Config</h2>
+<p>
+You could set your statusline all in one line, but that makes it quite unreadable, especially if it wraps multiple lines.
+What we can do instead is append sections using
+</p>
+<pre><code>set statusline+=[stuff]
+set statusline+=[more stuff]
+set statusline+=[even more stuff]
+</code></pre>
+<p>
+Vim gives you a couple nice variables to use, the full list can be found by running: <code class="inline-code">:h statusline</code>.
+Here's what a minimum statusbar might look like:
+</p>
+<pre><code>set statusline+=%f
+set statusline+=\ %l/%L:%c
+</code></pre>
+<img src="https://files.danieliu.xyz/blog/vim-bar/vim-bar1.png" />
+<p>
+It's not much but it's a start.
+We are making use of those vim variables I mentioned earlier. Specifically, the first line tells us the file name, and the second line
+gives us information on line number and what column we are on.
+Also notice the backslash space on the second line, that simply inserts a literal space character, useful for separating blocks.
+Play around with the variables and get a basic layout that you like, here's what I came up with:
+</p>
+<pre><code>set statusline+=\ | 
+set statusline+=\ vim\ \[%{mode()}\]
+set statusline+=\ %{expand('%:~:.')}\ %m
+set statusline+=%=
+set statusline+=%y
+set statusline+=\ %r\[%{v:register}\]
+set statusline+=\ %l/%L:%c
+set statusline+=\ |
+</code></pre>
+<img src="https://files.danieliu.xyz/blog/vim-bar/vim-bar2.gif" />
+<p>
+A couple interesting things to point out, whenever you see <code class="inline-code">%{}</code> we are calling a vim function, these can be ones you write too, which you will see a bit later. Next, <code class="inline-code">%=</code> is pretty useful since it right justifies everything after it.
+</p>
+
+<h2>Colors</h2>
+<p>
+The white bar is getting a bit tiring, let's see how we can set colors. The easiest way is to use:
+</p>
+<code>
+hi StatusLine cterm=None gui=None ctermfg=black ctermbg=Yellow
+</code>
+<p>
+These colors will be based off your terminal's colors, you can find a full list as well as what they look like by running <code class="inline-code">:runtime syntax/colortest.vim</code> in command mode. 
+</p>
+
+<p>
+Alright cool, so we can set the bar color, but how do we set the color of individual sections of the bar?
+Well, we have other highlights to our disposal that we can set and reference from within our statusline, specifically:
+</p>
+<pre><code>hi User1 cterm=None gui=None ctermfg=White ctermbg=Black
+hi User2 cterm=None gui=None ctermfg=Black ctermbg=LightBlue
+</code></pre>
+<p>
+And inside our statusline:
+</p>
+<pre><code>set statusline+=%1*\ |
+set statusline+=%0*\ vim\ \[%{mode()}\]
+set statusline+=\ %1*\ %{expand('%:~:.')}\ %m
+set statusline+=%=
+set statusline+=%y
+set statusline+=\ %2*
+set statusline+=\ %r\[%{v:register}\]
+set statusline+=\ %l/%L:%c\ |
+set statusline+=%1*\ |
+</code></pre>
+<img src="https://files.danieliu.xyz/blog/vim-bar/vim-bar3.png" />
+<p>
+Note how our use of <code class="inline-code">%1*</code> corresponds to <code class="inline-code">User1</code> and similarly for the other user variables. From what I've seen, <code class="inline-code">StatusLine</code> corresponds to <code class="inline-code">%0*</code>.
+</p>
+
+<h2>Responsive Bar</h2>
+<p>
+With this we can make our bar change color depending on what mode we are in, here's a function to do it:
+</p>
+<pre><code>function! StatusModeColor()
+    if (mode() =~# '\v(n|no)')
+        hi StatusLine cterm=None gui=None ctermfg=black ctermbg=Yellow
+    elseif (mode() =~# '\v(v|V)')
+        hi StatusLine cterm=None gui=None ctermfg=black ctermbg=Red
+    elseif (mode() ==# 'i')
+        hi StatusLine cterm=None gui=None ctermfg=black ctermbg=LightBlue
+    elseif (mode() ==# 'c') 
+        hi StatusLine cterm=None gui=None ctermfg=black ctermbg=Green
+    else
+        hi StatusLine cterm=None gui=None ctermfg=black ctermbg=DarkGrey
+    endif
+
+    return ''
+endfunction
+</code></pre>
+<p>
+and just add this line to the top of your statusbar:
+</p>
+<code>
+set statusline+=%{StatusModeColor()}
+</code>
+<img src="https://files.danieliu.xyz/blog/vim-bar/vim-bar4.gif" />
+<p>
+This way, the function will get called on statusbar redraw. This may not be the most efficient, and you can perhaps call the function on a mode change hook or whatever. The mode names in each of the if statements is what is returned from <code class="inline-code">mode()</code>. You can find a more or less full list <a href="https://gitlab.com/greduan/dotfiles/blob/76e16dd8a04501db29989824af512c453550591d/vim/after/plugin/statusline.vim">here</a>.
+</p>
+
+<p>
+And finally, I wanted some sort of indication if the buffer was modified or not, so here's another function to do that:
+</p>
+<pre><code>function! StatusModifiedColor()
+    if getbufinfo(1)[0].changed
+        hi User1 cterm=None gui=None ctermfg=Black ctermbg=Magenta
+    else
+        hi User1 cterm=None gui=None ctermfg=White ctermbg=Black
+    endif
+
+    return ''
+endfunction
+</code></pre>
+<p>
+And again, add this to the top of your statusbar:
+</p>
+<code>
+set statusline+=%{StatusModifiedColor()}
+</code>
+<img src="https://files.danieliu.xyz/blog/vim-bar/vim-bar5.gif" />
+<p>
+And that's about it, a brand new, plugin-less vim bar! My full vimrc can be found <a href="https://github.com/MrPicklePinosaur/dotfiles/blob/master/.vimrc">here</a> if you are interested. So far, I haven't found the nicest way of displaying open buffers, since vim's builtin tabline displays open <i>tabs</i>, not buffers. Perhaps that will be a post for another day when I figure it out.
+</p>
+
+<h2>Additional Reading</h2>
+<p>There's a couple of great resources you should look into</p>
+<ul>
+    <li><p><a href="https://shapeshed.com/vim-statuslines/">Build your own Vim statusline</a></p></li>
+    <li><p><a href="https://gitlab.com/greduan/dotfiles/blob/76e16dd8a04501db29989824af512c453550591d/vim/after/plugin/statusline.vim">Eduardo Lavaque's vim bar</a></p></li>
+    <li><p><a href="https://gist.github.com/ahmedelgabri/b9127dfe36ba86f4496c8c28eb65ef2b">ahmedelgabri's vim bar</a></p></li>
+</ul>
+        </div>
+
+    </body>
+    <script src="../../include.js"></script>
+    
+</html>
+<!-- ID:Make your own vim bar END -->
