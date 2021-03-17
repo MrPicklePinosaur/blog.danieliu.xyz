@@ -7,6 +7,155 @@
 <description>random stuff that daniel wants to post</description>
 
     <!-- BLOG START -->
+<!-- ID:HTN Frontend Writeup START -->
+<item>
+<title>HTN Frontend Writeup</title>
+<link>https://blog.danieliu.xyz/blog/html/HTN Frontend Writeup.html</link>
+<description>
+<![CDATA[
+
+<img src="https://files.danieliu.xyz/blog/htn-frontend/pinohacks_logo.png" style="image-rendering: pixelated; width: 20rem; height: auto;" />
+
+<p>
+This is the writeup detailing some design choice that went into my Hack the North Frontend Challenge.
+The task was to create a mock hackathon page with a schedule to display workshops and talks and such
+that would be taking place.
+</p>
+
+<h2>Frameworks, Tools and Other Goodness</h2>
+
+<p>
+My first impulse was to use react with typescript to build the frontend. However, I was already quite short
+on time since I spent some time on the backend challenge. So I decided to stick with vue, which I am more
+comfortable with. I also brought in vuex and vue-router since they would be needed anyways when the project
+scales.
+</p>
+
+<p>
+In the past, when running boilerplate code, ESlint was always bundled, and I recall getting infuriated by
+how picky it was, throwing a tantrum and preventing your code from running with you have a trailing space
+or something. However, I probably got a bit fed up with having to deal with inconsistent code style when
+working in a group, so I decided give it another shot. In the end, I gotta say it sorta grew on me.
+</p>
+
+<img src="https://files.danieliu.xyz/blog/htn-frontend/eslint.png" />
+
+<p>
+I have always been putting off learning docker, but I have finally decided to give it a shot this time. I'll
+be talking more about this in the deployment section later, where I deploy the project onto my own vps with
+nginx.
+</p>
+
+<p>
+Finally, for styling, I did some mixing and matching to my preferences. I used vuetify since they have a nice
+calendar component. Unfortunately, material design is not my favorite and vuetify was a bit more strict on the
+style, so I also opted for vue-bootstrap for a bit more fine tune control.
+</p>
+
+<h2>Auth</h2>
+
+<p>
+My idea for auth is to use json web tokens, although it depends on the backend I suppose. Anways, the idea is that
+whenever the server authenticates the user, they give back a token that the user stores in the local storage
+of the browser. This can help preserve login even if the tab is closed, and also serves a double purpose of a way
+to check to see if the user is currently logged in and displaying corresponding components (like a logout button
+instead of login). For the time being the auth module just returns a dummy promise, but it can be swapped out easily.
+</p>
+
+<p>
+Also, I would like to present possibly the most innovative authorization code in history. It runs on the client side
+for maximum performance of course.
+</p>
+<img src="https://files.danieliu.xyz/blog/htn-frontend/secure_auth.png" />
+
+<h2>Handling Data</h2>
+
+<p>
+Since the request the frontend makes to the server is just to get hackathon events, I thought about making a single
+request to the server for all the data on launch, and having the app reference the local data instead. This should
+work since hackathon events generally won't be changing much, especially across the time the user is on the app.
+</p>
+
+<h2>Localization</h2>
+<p>
+At one point I decided it would be cool to provide some translations for the page, since a virtual
+hackathon tends to attract a larger audience. For this project, I decided to provide english and
+japanese (no particular reason). A pretty interesting localization project called i18n has a vue integration
+so I decided to give it a shot. The idea of i18n is to provide metadata for each locale like so
+</p>
+<pre><code>{
+    'en': {
+        hello-text: 'Hello World!'
+    },
+    'ja': {
+        hello-text: 'このいちは，世界！'
+    }
+}
+</code></pre>
+<p>
+and then later in your vue component you can do something like so:
+</p>
+<pre><code>&lt;template&gt;
+    &lt;p&gt;{{ $t('hello-text') }}&lt;/p&gt;
+&lt;/template&gt;
+</code></pre>
+<p>
+And based on a locale variable you set, the text will be automagically generated. My first impression of
+this was it could get pretty unmaintainable with many components. However, i18n has support for single
+file components. By getting a specialized Vue loader, you can use i18n tags alongside in your vue components,
+like so
+</p>
+<pre><code>&lt;template&gt;
+    &lt;p&gt;{{ $t('hello-text') }}&lt;/p&gt;
+&lt;/template&gt;
+
+&lt;i18n&gt;
+{
+    "en": {
+        "hello-text": "Hello World!"
+    },
+    "ja": {
+        "hello-text": "このいちは，世界！"
+    }
+}
+&lt;/i18n&gt;
+</code></pre>
+<p>
+Beautiful. i18n is great for managing localizations, but I get the impression that it may not scale as well when
+you have more languages, as the files will get pretty crowded. Perhaps it may be better to use machine translations.
+For the scale of this project, it works perfectly.
+</p>
+
+<h2>Deploy</h2>
+
+<p>
+It's my first time deploying with docker, so it was quite the interesting experience. I found it especially awesome when
+I was messing around with docker how I could run my node app without having node installed. Getting nginx to play right
+with docker and properly mapping the ports was a bit of a headache. In the end, I couldn't get the frontend to work inside
+docker, so I just deployed it normally. Finally, I used certbot to get https up.
+</p>
+
+<h2>Extending</h2>
+
+<p>
+Hackathon application pages always impressed me quite a lot. I definitely wanted to make some sort of flashy animation
+process, which would also be pretty great for me to practice my design (my css-fu needs some improvement).
+Also, although the scope might be much bigger. I would have like to make a hacker dashboard, where you can view your responses
+to the application and view your application status.
+</p>
+
+<h2>Conclusion</h2>
+
+<p>
+Anyways, this has been a fun project where I got to learn a decent amount, despite the fact that it felt like a back-to-back hackathon
+(combined with the backend section). You can view the final product <a href="https://pinohacks.xyz">here</a>, as well as the git repo
+<a href="https://github.com/MrPicklePinosaur/PinoHacks-Frontend">here</a>. 
+</p>
+
+]]>
+</description>
+</item>
+<!-- ID:HTN Frontend Writeup END -->
 <!-- ID:Make your own vim bar START -->
 <item>
 <title>Make your own vim bar</title>
