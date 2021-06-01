@@ -1,0 +1,77 @@
+<!-- ID:ミニVIMヒント第1章 START -->
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="../../style.css"> 
+        <title>ミニVIMヒント第1章 - PinoLog</title>
+        <link rel="shortcut icon" href="../../static/pinolog_fav.png">
+
+    </head>
+
+    <body>
+        
+        <div id="header-banner">
+        </div> 
+        
+        <div class="article-container">
+        <h1>ミニVIMヒント第1章</h1>
+        <p class="rolling-date">Mon, May 31 20:34</p>
+        <hr>
+
+<p>
+あ，みんなさん，今日から週次にミニVIMヒントのブログポストが著すつもりです．しかし，大学とか，求職とか，きっと無理です．
+それより始めましょうか．
+</p>
+
+<p>
+今日のヒントの主題がホワイトスペースです．いろいろなホワイトスペース見えるようになりたい理由が存在します．
+たとえば末尾のスペースを消したい時に，スペースとタブとどっちがあるの気付きたい時に．
+</p>
+
+<p>
+VSCODEと他のIDEはもうこのフィチャーがあります．
+</p>
+
+<img src="https://files.danieliu.xyz/blog/mini-vim-tip/01_vscode.png" style="width: 50%"/>
+<img src="https://files.danieliu.xyz/blog/mini-vim-tip/01_sublime.jpg" style="width: 50%"/>
+
+<p>
+相変わらず，VIMもあります．ディフォールトオフだけです．
+コマンドラインモード（それとも.vimrc）で
+</p>
+<code>
+:set list!
+</code>
+<p>
+はホワイトスペース文字（スペース，タブ，ニューライン）を現れるのがトグルします．
+ボーナスホットキーマップ：
+</p>
+<code>
+map <leader>s :set list!<cr>
+</code>
+
+<img src="https://files.danieliu.xyz/blog/mini-vim-tip/01_before.png" />
+
+<p>
+今ちょっとかっこ悪いですけど，変えやすいですよ！簡単に
+</p>
+<code>
+set listchars=tab:▸\ ,space:·,eol:¬
+</code>
+<p>
+tab:とspace:とeol:の後で好きなカキャラクターを使います．これは結果：
+</p>
+
+<img src="https://files.danieliu.xyz/blog/mini-vim-tip/01_after.png" />
+
+<p>完璧．さって今日ここまで，次回はミニVIMヒント第２章！</p>
+
+        </div>
+
+    </body>
+    <script src="../../include.js"></script>
+    
+</html>
+<!-- ID:ミニVIMヒント第1章 END -->
