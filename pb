@@ -42,7 +42,7 @@ backup() {
 
 new() {
     [ -z "$1" ] && echo "Please give your blog post a name (you should put it inside quotations)" && exit 1 
-    sanitized=`echo -n "$1" | sed -e 's/[^A-Za-z0-9ぁ-ゔァ-ヴ一-龠々〆〤ー _-]//g'`
+    sanitized=`echo -n "$1" | sed -e 's/[^A-Za-z0-9ぁ-ゔァ-ヴ一-龠々〆〤ー _-\[\]:]//g'`
     [ -f "$data_dir/drafts/$sanitized.draft.html" ] && echo "Blog of that name already exists." && exit 1
     $EDITOR "$data_dir/drafts/$sanitized.draft.html"
 }
